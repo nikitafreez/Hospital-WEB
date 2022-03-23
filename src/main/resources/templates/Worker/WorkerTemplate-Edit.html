@@ -8,7 +8,7 @@
 <body>
 <div th:insert="/fragments/header-footer.html :: header"></div>
 
-<div th:each="el : ${worker}">
+<div th:each="el : ${worker1}">
     <form method="post" th:object="${worker}">
         <input name="name" placeholder="Имя" type="text" th:value="${el.name}"
                style="margin-bottom: 10px; margin-left: 10px; border-radius: 5px;"><br>
@@ -34,9 +34,12 @@
                style="margin-bottom: 10px; margin-left: 10px; border-radius: 5px;"><br>
         <div th:if="${#fields.hasErrors('INN')}" th:errors="*{INN}" style="color: darkred"></div>
 
-        <input name="birthDate" placeholder="День рождения" type="date" th:value="${el.birthDate}"
+        <input id="dete" name="birthDate" placeholder="День рождения" type="date" th:value="${el.birthDate}"
                style="margin-bottom: 10px; margin-left: 10px; border-radius: 5px;"><br>
         <div th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}" style="color: darkred"></div>
+        <script>
+            document.getElementById('dete').valueAsDate = new Date();
+        </script>
 
         <select name="positionName" style="margin-left: 10px">
             <div th:each="el : ${positions}">

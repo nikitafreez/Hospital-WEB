@@ -33,9 +33,12 @@
            style="margin-bottom: 10px; margin-left: 10px; border-radius: 5px;"><br>
     <div th:if="${#fields.hasErrors('INN')}" th:errors="*{INN}" style="color: darkred"></div>
 
-    <input name="birthDate" th:field="*{birthDate}" placeholder="День рождения" type="date"
+    <input id="dete" name="birthDate" th:field="*{birthDate}" placeholder="День рождения" type="date"
            style="margin-bottom: 10px; margin-left: 10px; border-radius: 5px;"><br>
     <div th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}" style="color: darkred"></div>
+    <script>
+        document.getElementById('dete').valueAsDate = new Date();
+    </script>
 
     <select name="positionName" style="margin-left: 10px">
         <div th:each="el : ${positions}">

@@ -12,31 +12,34 @@
     <form method="post" th:object="${patient}">
         <input name="name" placeholder="Имя" type="text" th:value="${el.name}"
                style="margin-bottom: 10px; margin-left: 10px; border-radius: 5px;"><br>
-        <div th:if="${#fields.hasErrors('name')}" th:errors="*{Name}" style="color: darkred"></div>
+        <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: darkred"></div>
 
         <input name="surname" placeholder="Фамилия" type="text"  th:value="${el.surname}"
                style="margin-bottom: 10px; margin-left: 10px; border-radius: 5px;"><br>
-        <div th:if="${#fields.hasErrors('surname')}" th:errors="*{Surname}" style="color: darkred"></div>
+        <div th:if="${#fields.hasErrors('surname')}" th:errors="*{name}" style="color: darkred"></div>
 
         <input name="patronymic" placeholder="Отчество" type="text"  th:value="${el.patronymic}"
                style="margin-bottom: 10px; margin-left: 10px; border-radius: 5px;"><br>
-        <div th:if="${#fields.hasErrors('patronymic')}" th:errors="*{Patronymic}" style="color: darkred"></div>
+        <div th:if="${#fields.hasErrors('patronymic')}" th:errors="*{patronymic}" style="color: darkred"></div>
 
         <input name="passSeria" placeholder="Серия паспорта" type="text"  th:value="${el.passSeria}"
                style="margin-bottom: 10px; margin-left: 10px; border-radius: 5px;"><br>
-        <div th:if="${#fields.hasErrors('passSeria')}" th:errors="*{PassSeria}" style="color: darkred"></div>
+        <div th:if="${#fields.hasErrors('passSeria')}" th:errors="*{passSeria}" style="color: darkred"></div>
 
         <input name="passNum" placeholder="Номер паспорта" type="text"  th:value="${el.passNum}"
                style="margin-bottom: 10px; margin-left: 10px; border-radius: 5px;"><br>
-        <div th:if="${#fields.hasErrors('passNum')}" th:errors="*{PassNum}" style="color: darkred"></div>
+        <div th:if="${#fields.hasErrors('passNum')}" th:errors="*{passNum}" style="color: darkred"></div>
 
         <input name="OMS" placeholder="ОМС" type="text"  th:value="${el.OMS}"
                style="margin-bottom: 10px; margin-left: 10px; border-radius: 5px;"><br>
         <div th:if="${#fields.hasErrors('OMS')}" th:errors="*{OMS}" style="color: darkred"></div>
 
-        <input name="birthDate" placeholder="День рождения" type="date"  th:value="${el.birthDate}"
+        <input id="dete" name="birthDate" placeholder="День рождения" type="date"  th:value="${el.birthDate}"
                style="margin-bottom: 10px; margin-left: 10px; border-radius: 5px;"><br>
         <div th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}" style="color: darkred"></div>
+        <script>
+            document.getElementById('dete').valueAsDate = new Date();
+        </script>
 
         <button type="submit" class="btn btn-success" style="margin-left: 10px">Добавить</button>
     </form>

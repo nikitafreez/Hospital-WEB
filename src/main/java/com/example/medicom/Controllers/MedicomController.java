@@ -82,7 +82,7 @@ public class MedicomController {
         ArrayList<User> res = new ArrayList<>();
         users.ifPresent(res::add);
         model.addAttribute("user1", res);
-        return "Worker/WorkerTemplate-Edit";
+        return "User/UserTemplate-Edit";
     }
 
     @PostMapping("/users/{id}/edit")
@@ -370,31 +370,52 @@ public class MedicomController {
         return "redirect:/diseases";
     }
 
-    /*
-    НЕ ГОТОВО ДО КОНЦА!!!!!!!!!!!
-     */
     //TODO ДОДЕЛАТЬ "ЛЕЧЕНИЕ"
+
     @GetMapping("/treatments")
     public String treatmentMain(Model model) {
         Iterable<Treatment> treatments = treatmentRepository.findAll();
         model.addAttribute("treatments", treatments);
-        return "Worker/WorkerTemplate";
+        return "Treatment/TreatmentTemplate";
     }
 
     @GetMapping("/treatments/add")
     public String treatmentGet(Treatment treatment, Model model) {
-        Iterable<Treatment> treatments = treatmentRepository.findAll();
-        model.addAttribute("treatments", treatments);
-        return "Worker/WorkerTemplate-Add";
+        Iterable<Worker> workers = workerRepository.findAll();
+        Iterable<Patient> patients = patientRepository.findAll();
+        Iterable<Disease> diseases = diseaseRepository.findAll();
+
+        model.addAttribute("workers", workers);
+        model.addAttribute("patients", patients);
+        model.addAttribute("diseases", diseases);
+
+        return "Treatment/TreatmentTemplate-Add";
     }
 
     @PostMapping("/treatments/add")
     public String treatmentPost(@Valid Treatment treatment,
-                             BindingResult bindingResult,
-                             Model model) {
+                                BindingResult bindingResult,
+                                @RequestParam String diseaseName,
+                                @RequestParam String patientOMS,
+                                @RequestParam String workerINN,
+                                Model model) {
+        Iterable<Worker> workers = workerRepository.findAll();
+        Iterable<Patient> patients = patientRepository.findAll();
+        Iterable<Disease> diseases = diseaseRepository.findAll();
+
+        model.addAttribute("workers", workers);
+        model.addAttribute("patients", patients);
+        model.addAttribute("diseases", diseases);
         if (bindingResult.hasErrors())
-            return "Worker/WorkerTemplate-Add";
+            return "Treatment/TreatmentTemplate-Add";
         else {
+            Disease disease = diseaseRepository.findByDiseaseName(diseaseName);
+            Worker worker = workerRepository.findByINN(workerINN.substring(5, 17));
+            Patient patient = patientRepository.findByOMS(patientOMS.substring(5, 21));
+
+            treatment.setDisease_(disease);
+            treatment.setWorker_(worker);
+            treatment.setPatient_(patient);
             treatmentRepository.save(treatment);
             return "redirect:/treatments";
         }
@@ -402,43 +423,64 @@ public class MedicomController {
 
     @GetMapping("/treatments/{id}/edit")
     public String treatmentEdit(@PathVariable(value = "id") Long id,
-                             Worker worker, Model model) {
-        if (!workerRepository.existsById(id))
+                                Treatment treatment, Model model) {
+        if (!treatmentRepository.existsById(id))
             return "redirect:/treatments";
-        Iterable<Position> positions = positionRepository.findAll();
-        Optional<Worker> workers = workerRepository.findById(id);
-        ArrayList<Worker> res = new ArrayList<>();
-        workers.ifPresent(res::add);
-        model.addAttribute("worker1", res);
-        model.addAttribute("positions", positions);
-        return "Worker/WorkerTemplate-Edit";
+        Iterable<Worker> workers = workerRepository.findAll();
+        Iterable<Patient> patients = patientRepository.findAll();
+        Iterable<Disease> diseases = diseaseRepository.findAll();
+        Optional<Treatment> treatments = treatmentRepository.findById(id);
+        ArrayList<Treatment> res = new ArrayList<>();
+        treatments.ifPresent(res::add);
+        model.addAttribute("treatment1", res);
+        model.addAttribute("workers", workers);
+        model.addAttribute("patients", patients);
+        model.addAttribute("diseases", diseases);
+        return "Treatment/TreatmentTemplate-Edit";
     }
 
     @PostMapping("/treatments/{id}/edit")
     public String treatmentUpdate(@PathVariable(value = "id") Long id,
-                               @Valid Worker worker,
-                               @RequestParam String positionName,
-                               BindingResult bindingResult,
-                               Model model) {
+                                  @Valid Treatment treatment,
+                                  @RequestParam String diseaseName,
+                                  @RequestParam String patientOMS,
+                                  @RequestParam String workerINN,
+                                  BindingResult bindingResult,
+                                  Model model) {
+        Iterable<Worker> workers = workerRepository.findAll();
+        Iterable<Patient> patients = patientRepository.findAll();
+        Iterable<Disease> diseases = diseaseRepository.findAll();
+
+        model.addAttribute("workers", workers);
+        model.addAttribute("patients", patients);
+        model.addAttribute("diseases", diseases);
         if (bindingResult.hasErrors()) {
-            Optional<Worker> workers = workerRepository.findById(id);
-            ArrayList<Worker> res = new ArrayList<>();
-            workers.ifPresent(res::add);
-            model.addAttribute("worker1", res);
-            return "Worker/WorkerTemplate-Edit";
+            Optional<Treatment> treatments = treatmentRepository.findById(id);
+            ArrayList<Treatment> res = new ArrayList<>();
+            treatments.ifPresent(res::add);
+            model.addAttribute("treatment1", res);
+            model.addAttribute("workers", workers);
+            model.addAttribute("patients", patients);
+            model.addAttribute("diseases", diseases);
+            return "Treatment/TreatmentTemplate-Edit";
         } else {
-            Position position = positionRepository.findByPositionName(positionName);
-            worker.setPosition_(position);
-            workerRepository.save(worker);
+            Disease disease = diseaseRepository.findByDiseaseName(diseaseName);
+            Worker worker = workerRepository.findByINN(workerINN.substring(5, 17));
+            Patient patient = patientRepository.findByOMS(patientOMS.substring(5, 21));
+
+            treatment.setDisease_(disease);
+            treatment.setWorker_(worker);
+            treatment.setPatient_(patient);
+            treatmentRepository.save(treatment);
             return "redirect:/treatments";
         }
     }
 
-    @GetMapping("/workers/{id}/delete")
+    @GetMapping("/treatments/{id}/delete")
     public String treatmentDelete(@PathVariable(value = "id") Long id,
-                               Model model) {
-        Worker worker = workerRepository.findById(id).orElseThrow();
-        workerRepository.delete(worker);
+                                  Model model) {
+        Treatment treatment = treatmentRepository.findById(id).orElseThrow();
+        treatmentRepository.delete(treatment);
         return "redirect:/treatments";
     }
 }

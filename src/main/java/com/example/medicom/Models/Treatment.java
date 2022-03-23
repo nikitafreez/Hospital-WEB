@@ -1,6 +1,10 @@
 package com.example.medicom.Models;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
@@ -9,7 +13,11 @@ public class Treatment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Date treatmentDate;
+    @NotNull(message = "Поле не может быть пустым")
+    @NotEmpty(message = "Поле не может быть пустым")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private String treatmentDate;
+
 
     private Float treatmentSum;
 
@@ -33,11 +41,11 @@ public class Treatment {
         this.id = id;
     }
 
-    public Date getTreatmentDate() {
+    public String getTreatmentDate() {
         return treatmentDate;
     }
 
-    public void setTreatmentDate(Date treatmentDate) {
+    public void setTreatmentDate(String treatmentDate) {
         this.treatmentDate = treatmentDate;
     }
 
@@ -73,7 +81,7 @@ public class Treatment {
         this.disease_ = disease_;
     }
 
-    public Treatment(Date treatmentDate, Float treatmentSum, Worker worker_, Patient patient_, Disease disease_) {
+    public Treatment(String treatmentDate, Float treatmentSum, Worker worker_, Patient patient_, Disease disease_) {
         this.treatmentDate = treatmentDate;
         this.treatmentSum = treatmentSum;
         this.worker_ = worker_;
