@@ -5,38 +5,12 @@
     <meta charset="UTF-8">
     <title>Главная</title>
 </head>
-<style>
-    .Row {
-        display: table;
-        width: 100%; /*Optional*/
-        table-layout: fixed; /*Optional*/
-        border-spacing: 10px; /*Optional*/
-    }
-
-    .Column {
-        display: table-cell;
-        /*background-color: red; !*Optional*!*/
-    }
-</style>
 <body>
 <div th:insert="/fragments/header-footer.html :: header"></div>
 
-    <div th:each="user ,el : ${users}" align="center" style="margin-bottom: 20px">
+<img src="https://i.pinimg.com/originals/8e/cf/e6/8ecfe6fbeefe159a1608daed440fa443.jpg"
+     style="margin-left: auto; margin-right: auto; display: block; width: 70% ">
 
-        <div class="card" style="width: 30rem" align="left">
-            <div class="card-body">
-<!--                <h1 th:text="${el.index}"></h1>-->
-                <h4 class="card-title">Пользователь <span th:text="${user.login}"></span></h4>
-                <h6 class="card-subtitle mb-2 text-muted">Последний вход: <span th:text="${user.lastEnter}"></span></h6>
-                <!--            <h5>Логин</h5>-->
-                <!--            <p class="card-text" th:text="${el.login}"></p>-->
-                <!--            <h5>Пароль</h5>-->
-                <!--            <p class="card-text" th:text="${el.password}"></p>-->
-                <button type="button" class="btn btn-secondary">Изменить</button>
-                <button type="button" class="btn btn-danger">Удалить</button>
-            </div>
-        </div>
-    </div>
 <div th:insert="/fragments/header-footer.html :: footer"></div>
 
 </body>

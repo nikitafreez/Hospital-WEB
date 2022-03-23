@@ -1,6 +1,8 @@
 package com.example.medicom.Models;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Collection;
 import java.util.Date;
 
@@ -10,8 +12,12 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull(message = "Поле не может быть пустым")
+    @NotEmpty(message = "Поле не может быть пустым")
     private String login;
 
+    @NotNull(message = "Поле не может быть пустым")
+    @NotEmpty(message = "Поле не может быть пустым")
     private String password;
 
     private String role;

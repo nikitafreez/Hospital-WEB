@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>Пользователи</title>
+</head>
+<body>
+<div th:insert="/fragments/header-footer.html :: header"></div>
+
+<div th:each="el : ${patient1}">
+    <form method="post" th:object="${patient}">
+        <input name="name" th:field="*{name}" placeholder="Имя" type="text" th:value="${el.name}"
+               style="margin-bottom: 10px; margin-left: 10px; border-radius: 5px;"><br>
+        <div th:if="${#fields.hasErrors('name')}" th:errors="*{Name}" style="color: darkred"></div>
+
+        <input name="surname" th:field="*{surname}" placeholder="Фамилия" type="text"  th:value="${el.surname}"
+               style="margin-bottom: 10px; margin-left: 10px; border-radius: 5px;"><br>
+        <div th:if="${#fields.hasErrors('surname')}" th:errors="*{Surname}" style="color: darkred"></div>
+
+        <input name="patronymic" th:field="*{patronymic}" placeholder="Отчество" type="text"  th:value="${el.patronymic}"
+               style="margin-bottom: 10px; margin-left: 10px; border-radius: 5px;"><br>
+        <div th:if="${#fields.hasErrors('patronymic')}" th:errors="*{Patronymic}" style="color: darkred"></div>
+
+        <input name="passSeria" th:field="*{passSeria}" placeholder="Серия паспорта" type="text"  th:value="${el.passSeria}"
+               style="margin-bottom: 10px; margin-left: 10px; border-radius: 5px;"><br>
+        <div th:if="${#fields.hasErrors('passSeria')}" th:errors="*{PassSeria}" style="color: darkred"></div>
+
+        <input name="passNum" th:field="*{passNum}" placeholder="Номер паспорта" type="text"  th:value="${el.passNum}"
+               style="margin-bottom: 10px; margin-left: 10px; border-radius: 5px;"><br>
+        <div th:if="${#fields.hasErrors('passNum')}" th:errors="*{PassNum}" style="color: darkred"></div>
+
+        <input name="OMS" th:field="*{OMS}" placeholder="ОМС" type="text"  th:value="${el.OMS}"
+               style="margin-bottom: 10px; margin-left: 10px; border-radius: 5px;"><br>
+        <div th:if="${#fields.hasErrors('OMS')}" th:errors="*{OMS}" style="color: darkred"></div>
+
+        <input name="birthDate" th:field="*{birthDate}" placeholder="День рождения" type="date"  th:value="${el.birthDate}"
+               style="margin-bottom: 10px; margin-left: 10px; border-radius: 5px;"><br>
+        <div th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}" style="color: darkred"></div>
+
+        <button type="submit" class="btn btn-success" style="margin-left: 10px">Добавить</button>
+    </form>
+</div>
+</body>
+</html>

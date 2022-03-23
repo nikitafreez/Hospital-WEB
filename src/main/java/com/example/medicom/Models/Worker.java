@@ -1,6 +1,13 @@
 package com.example.medicom.Models;
 
+import net.bytebuddy.implementation.bind.annotation.Empty;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
+import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.Date;
 
@@ -11,19 +18,35 @@ public class Worker {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull(message = "Поле не может быть пустым")
+    @NotEmpty(message = "Поле не может быть пустым")
     private String Name;
 
+    @NotNull(message = "Поле не может быть пустым")
+    @NotEmpty(message = "Поле не может быть пустым")
     private String Surname;
 
     private String Patronymic;
 
+    @NotNull(message = "Поле не может быть пустым")
+    @NotEmpty(message = "Поле не может быть пустым")
+    @Size(min = 4, max = 4, message = "Серия должна содержать 4 символа")
     private String PassSeria;
 
+    @NotNull(message = "Поле не может быть пустым")
+    @NotEmpty(message = "Поле не может быть пустым")
+    @Size(min = 6, max = 6, message = "Номер должен содержать 6 символов")
     private String PassNum;
 
+    @NotNull(message = "Поле не может быть пустым")
+    @NotEmpty(message = "Поле не может быть пустым")
+    @Size(min = 12, max = 12, message = "ИНН должен содержать 12 символов")
     private String INN;
 
-    private Date birthDate;
+    @NotNull(message = "Поле не может быть пустым")
+    @NotEmpty(message = "Поле не может быть пустым")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private String birthDate;
 
     @ManyToOne(optional = false, cascade = CascadeType.DETACH)
     @JoinColumn(name = "position_id")
@@ -104,15 +127,15 @@ public class Worker {
         this.position_ = position_;
     }
 
-    public Date getBirthDate() {
+    public String getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(Date birthDate) {
+    public void setBirthDate(String birthDate) {
         this.birthDate = birthDate;
     }
 
-    public Worker(String name, String surname, String patronymic, String passSeria, String passNum, String INN, Date birthDate, Position position_) {
+    public Worker(String name, String surname, String patronymic, String passSeria, String passNum, String INN, String birthDate, Position position_) {
         Name = name;
         Surname = surname;
         Patronymic = patronymic;

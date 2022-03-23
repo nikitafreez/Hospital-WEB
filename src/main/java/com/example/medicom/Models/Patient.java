@@ -1,6 +1,11 @@
 package com.example.medicom.Models;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.Date;
 
@@ -11,18 +16,34 @@ public class Patient {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull(message = "Поле не может быть пустым")
+    @NotEmpty(message = "Поле не может быть пустым")
     private String Name;
 
+    @NotNull(message = "Поле не может быть пустым")
+    @NotEmpty(message = "Поле не может быть пустым")
     private String Surname;
 
+    @NotNull(message = "Поле не может быть пустым")
+    @NotEmpty(message = "Поле не может быть пустым")
     private String Patronymic;
 
+    @NotNull(message = "Поле не может быть пустым")
+    @NotEmpty(message = "Поле не может быть пустым")
+    @Size(min = 4, max = 4, message = "Серия паспорта должна содержать 4 символа")
     private String PassSeria;
 
+    @NotNull(message = "Поле не может быть пустым")
+    @NotEmpty(message = "Поле не может быть пустым")
+    @Size(min = 6, max = 6, message = "Номер паспорта должен содержать 6 символов")
     private String PassNum;
 
+    @NotNull(message = "Поле не может быть пустым")
+    @NotEmpty(message = "Поле не может быть пустым")
+    @Size(min = 16, max = 16, message = "Номер ОМС должен содержать 16 символов")
     private String OMS;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birthDate;
 
     @OneToMany(mappedBy = "patient_", fetch = FetchType.EAGER)
