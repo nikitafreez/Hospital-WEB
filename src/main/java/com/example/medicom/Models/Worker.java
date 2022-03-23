@@ -4,10 +4,7 @@ import net.bytebuddy.implementation.bind.annotation.Empty;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.util.Collection;
 import java.util.Date;
 
@@ -28,19 +25,16 @@ public class Worker {
 
     private String Patronymic;
 
-    @NotNull(message = "Поле не может быть пустым")
-    @NotEmpty(message = "Поле не может быть пустым")
-    @Size(min = 4, max = 4, message = "Серия должна содержать 4 символа")
+    @Pattern(regexp = "\\d{4}",
+            message = "Серия паспорта должна содержать 4 цифры")
     private String PassSeria;
 
-    @NotNull(message = "Поле не может быть пустым")
-    @NotEmpty(message = "Поле не может быть пустым")
-    @Size(min = 6, max = 6, message = "Номер должен содержать 6 символов")
+    @Pattern(regexp = "\\d{6}",
+            message = "Номер паспорта должен содержать 6 цифр")
     private String PassNum;
 
-    @NotNull(message = "Поле не может быть пустым")
-    @NotEmpty(message = "Поле не может быть пустым")
-    @Size(min = 12, max = 12, message = "ИНН должен содержать 12 символов")
+    @Pattern(regexp = "\\d{12}",
+            message = "Номер ИНН должен содержать 12 цифр")
     private String INN;
 
     @NotNull(message = "Поле не может быть пустым")

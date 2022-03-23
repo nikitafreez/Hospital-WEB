@@ -10,7 +10,7 @@
 
 <div th:each="el : ${position}">
     <form method="post" th:object="${position}">
-        <input name="positionName" th:field="*{positionName}" placeholder="Название должности" type="text" th:value="${el.positionName}"
+        <input name="positionName" placeholder="Название должности" type="text" th:value="${el.positionName}"
                style="margin-bottom: 10px; margin-left: 10px; border-radius: 5px;"><br>
         <div th:if="${#fields.hasErrors('positionName')}" th:errors="*{positionName}" style="color: darkred"></div>
 

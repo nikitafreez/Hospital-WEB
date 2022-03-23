@@ -1,13 +1,7 @@
 package com.example.medicom.Controllers;
 
-import com.example.medicom.Models.Patient;
-import com.example.medicom.Models.Position;
-import com.example.medicom.Models.User;
-import com.example.medicom.Models.Worker;
-import com.example.medicom.Repository.PatientRepository;
-import com.example.medicom.Repository.PositionRepository;
-import com.example.medicom.Repository.UserRepository;
-import com.example.medicom.Repository.WorkerRepository;
+import com.example.medicom.Models.*;
+import com.example.medicom.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,6 +27,10 @@ public class MedicomController {
     private PositionRepository positionRepository;
     @Autowired
     private PatientRepository patientRepository;
+    @Autowired
+    private DiseaseRepository diseaseRepository;
+    @Autowired
+    private TreatmentRepository treatmentRepository;
 
     @GetMapping("/")
     public String main(Model model) {
@@ -194,7 +192,10 @@ public class MedicomController {
     @PostMapping("/workers/add")
     public String workerPost(@Valid Worker worker,
                              BindingResult bindingResult,
-                             @RequestParam String positionName) {
+                             @RequestParam String positionName,
+                             Model model) {
+        Iterable<Position> positions = positionRepository.findAll();
+        model.addAttribute("positions", positions);
         if (bindingResult.hasErrors())
             return "Worker/WorkerTemplate-Add";
         else {
@@ -306,5 +307,138 @@ public class MedicomController {
         Patient patient = patientRepository.findById(id).orElseThrow();
         patientRepository.delete(patient);
         return "redirect:/patients";
+    }
+
+    @GetMapping("/diseases")
+    public String diseaseMain(Model model) {
+        Iterable<Disease> diseases = diseaseRepository.findAll();
+        model.addAttribute("diseases", diseases);
+        return "Disease/DiseaseTemplate";
+    }
+
+    @GetMapping("/diseases/add")
+    public String diseaseGet(Disease disease) {
+
+        return "Disease/DiseaseTemplate-Add";
+    }
+
+    @PostMapping("/diseases/add")
+    public String diseasePost(@Valid Disease disease,
+                              BindingResult bindingResult) {
+        if (bindingResult.hasErrors())
+            return "Disease/DiseaseTemplate-Add";
+        else {
+            diseaseRepository.save(disease);
+            return "redirect:/diseases";
+        }
+    }
+
+    @GetMapping("/diseases/{id}/edit")
+    public String diseaseEdit(@PathVariable(value = "id") Long id,
+                              Disease disease, Model model) {
+        if (!diseaseRepository.existsById(id))
+            return "redirect:/diseases";
+        Optional<Disease> diseases = diseaseRepository.findById(id);
+        ArrayList<Disease> res = new ArrayList<>();
+        diseases.ifPresent(res::add);
+        model.addAttribute("disease1", res);
+        return "Disease/DiseaseTemplate-Edit";
+    }
+
+    @PostMapping("/diseases/{id}/edit")
+    public String diseaseUpdate(@PathVariable(value = "id") Long id,
+                                @Valid Disease disease,
+                                BindingResult bindingResult,
+                                Model model) {
+        if (bindingResult.hasErrors()) {
+            Optional<Disease> diseases = diseaseRepository.findById(id);
+            ArrayList<Disease> res = new ArrayList<>();
+            diseases.ifPresent(res::add);
+            model.addAttribute("disease1", res);
+            return "Disease/DiseaseTemplate-Edit";
+        } else {
+            diseaseRepository.save(disease);
+            return "redirect:/diseases";
+        }
+    }
+
+    @GetMapping("/diseases/{id}/delete")
+    public String diseaseDelete(@PathVariable(value = "id") Long id,
+                                Model model) {
+        Disease disease = diseaseRepository.findById(id).orElseThrow();
+        diseaseRepository.delete(disease);
+        return "redirect:/diseases";
+    }
+
+    /*
+    НЕ ГОТОВО ДО КОНЦА!!!!!!!!!!!
+     */
+    //TODO ДОДЕЛАТЬ "ЛЕЧЕНИЕ"
+    @GetMapping("/treatments")
+    public String treatmentMain(Model model) {
+        Iterable<Treatment> treatments = treatmentRepository.findAll();
+        model.addAttribute("treatments", treatments);
+        return "Worker/WorkerTemplate";
+    }
+
+    @GetMapping("/treatments/add")
+    public String treatmentGet(Treatment treatment, Model model) {
+        Iterable<Treatment> treatments = treatmentRepository.findAll();
+        model.addAttribute("treatments", treatments);
+        return "Worker/WorkerTemplate-Add";
+    }
+
+    @PostMapping("/treatments/add")
+    public String treatmentPost(@Valid Treatment treatment,
+                             BindingResult bindingResult,
+                             Model model) {
+        if (bindingResult.hasErrors())
+            return "Worker/WorkerTemplate-Add";
+        else {
+            treatmentRepository.save(treatment);
+            return "redirect:/treatments";
+        }
+    }
+
+    @GetMapping("/treatments/{id}/edit")
+    public String treatmentEdit(@PathVariable(value = "id") Long id,
+                             Worker worker, Model model) {
+        if (!workerRepository.existsById(id))
+            return "redirect:/treatments";
+        Iterable<Position> positions = positionRepository.findAll();
+        Optional<Worker> workers = workerRepository.findById(id);
+        ArrayList<Worker> res = new ArrayList<>();
+        workers.ifPresent(res::add);
+        model.addAttribute("worker1", res);
+        model.addAttribute("positions", positions);
+        return "Worker/WorkerTemplate-Edit";
+    }
+
+    @PostMapping("/treatments/{id}/edit")
+    public String treatmentUpdate(@PathVariable(value = "id") Long id,
+                               @Valid Worker worker,
+                               @RequestParam String positionName,
+                               BindingResult bindingResult,
+                               Model model) {
+        if (bindingResult.hasErrors()) {
+            Optional<Worker> workers = workerRepository.findById(id);
+            ArrayList<Worker> res = new ArrayList<>();
+            workers.ifPresent(res::add);
+            model.addAttribute("worker1", res);
+            return "Worker/WorkerTemplate-Edit";
+        } else {
+            Position position = positionRepository.findByPositionName(positionName);
+            worker.setPosition_(position);
+            workerRepository.save(worker);
+            return "redirect:/treatments";
+        }
+    }
+
+    @GetMapping("/workers/{id}/delete")
+    public String treatmentDelete(@PathVariable(value = "id") Long id,
+                               Model model) {
+        Worker worker = workerRepository.findById(id).orElseThrow();
+        workerRepository.delete(worker);
+        return "redirect:/treatments";
     }
 }

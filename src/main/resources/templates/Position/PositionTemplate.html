@@ -8,7 +8,8 @@
 <body>
 <div th:insert="/fragments/header-footer.html :: header"></div>
 <h2 align="center">ДОЛЖНОСТИ</h2>
-<a href="/positions/add" style="text-decoration: none; margin-left: 48%" >Добавить</a>
+<a type="button" th:href="'/positions/add'" class="btn btn-success"
+   style="margin-left: auto; margin-right: auto; display: block; width: 15%">Добавить</a>
 <div th:each="position ,el : ${positions}" align="center" style="margin-top: 20px">
     <div class="card" style="width: 30rem" align="left">
         <div class="card-body">

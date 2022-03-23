@@ -10,11 +10,11 @@
 
 <div th:each="el : ${user}">
     <form method="post" th:object="${user}">
-        <input name="login" th:field="*{login}" placeholder="Логин" type="text" th:value="${el.login}"
+        <input name="login" placeholder="Логин" type="text" th:value="${el.login}"
                style="margin-bottom: 10px; margin-left: 10px; border-radius: 5px;"><br>
         <div th:if="${#fields.hasErrors('login')}" th:errors="*{login}" style="color: darkred"></div>
 
-        <input name="password" th:field="*{password}" placeholder="Пароль" type="text" th:value="${el.password}"
+        <input name="password" placeholder="Пароль" type="text" th:value="${el.password}"
                style="margin-bottom: 10px; margin-left: 10px; border-radius: 5px;"><br>
         <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" style="color: darkred"></div>
 
