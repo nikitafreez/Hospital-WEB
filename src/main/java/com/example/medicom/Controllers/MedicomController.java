@@ -45,7 +45,7 @@ public class MedicomController {
     }
 
     @GetMapping("/users")
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     public String userMain(Model model) {
         Iterable<User> users = userRepository.findAll();
         model.addAttribute("users", users);
@@ -152,7 +152,7 @@ public class MedicomController {
 
 
     @GetMapping("/positions")
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     public String positionMain(Model model) {
         Iterable<Position> positions = positionRepository.findAll();
         model.addAttribute("positions", positions);
@@ -214,7 +214,7 @@ public class MedicomController {
     }
 
     @GetMapping("/workers")
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     public String workerMain(Model model) {
         Iterable<Worker> workers = workerRepository.findAll();
         model.addAttribute("workers", workers);
@@ -288,7 +288,7 @@ public class MedicomController {
     }
 
     @GetMapping("/patients")
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     public String patientMain(Model model) {
         Iterable<Patient> patients = patientRepository.findAll();
         model.addAttribute("patients", patients);
@@ -350,7 +350,7 @@ public class MedicomController {
     }
 
     @GetMapping("/diseases")
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     public String diseaseMain(Model model) {
         Iterable<Disease> diseases = diseaseRepository.findAll();
         model.addAttribute("diseases", diseases);
@@ -412,7 +412,7 @@ public class MedicomController {
     }
 
     @GetMapping("/treatments")
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     public String treatmentMain(Model model) {
         Iterable<Treatment> treatments = treatmentRepository.findAll();
         model.addAttribute("treatments", treatments);
