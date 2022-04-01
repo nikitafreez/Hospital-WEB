@@ -8,6 +8,7 @@
 <body>
 <div th:insert="/fragments/header-footer.html :: header"></div>
 
+
 <form action="/workers/add" method="post" th:object="${worker}">
     <input name="name" th:field="*{name}" placeholder="Имя" type="text"
            style="margin-bottom: 10px; margin-left: 10px; border-radius: 5px;"><br>
@@ -39,6 +40,10 @@
     <script>
         document.getElementById('dete').valueAsDate = new Date();
     </script>
+
+    <input name="email" th:field="*{email}" placeholder="Эл. почта" type="text"
+           style="margin-bottom: 10px; margin-left: 10px; border-radius: 5px;"><br>
+    <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color: darkred"></div>
 
     <select name="positionName" style="margin-left: 10px">
         <div th:each="el : ${positions}">

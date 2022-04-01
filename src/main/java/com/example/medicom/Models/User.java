@@ -5,6 +5,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 public class User {
@@ -14,13 +15,18 @@ public class User {
 
     @NotNull(message = "Поле не может быть пустым")
     @NotEmpty(message = "Поле не может быть пустым")
-    private String login;
+    private String username;
 
     @NotNull(message = "Поле не может быть пустым")
     @NotEmpty(message = "Поле не может быть пустым")
     private String password;
 
-    private String role;
+    private boolean active;
+
+    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
+    @Enumerated(EnumType.STRING)
+    private Set<Role> roles;
 
     private Date lastEnter;
 
@@ -35,12 +41,12 @@ public class User {
         this.id = id;
     }
 
-    public String getLogin() {
-        return login;
+    public String getUsername() {
+        return username;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setUsername(String login) {
+        this.username = login;
     }
 
     public String getPassword() {
@@ -51,12 +57,20 @@ public class User {
         this.password = password;
     }
 
-    public String getRole() {
-        return role;
+    public Set<Role> getRoles() {
+        return roles;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public Date getLastEnter() {
@@ -75,10 +89,11 @@ public class User {
         this.logCollection = logCollection;
     }
 
-    public User(String login, String password, String role, Date lastEnter) {
-        this.login = login;
+    public User(String username, String password, boolean active, Set<Role> roles, Date lastEnter) {
+        this.username = username;
         this.password = password;
-        this.role = role;
+        this.active = active;
+        this.roles = roles;
         this.lastEnter = lastEnter;
     }
 

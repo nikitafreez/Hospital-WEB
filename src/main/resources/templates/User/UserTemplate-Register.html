@@ -11,7 +11,7 @@
     <p th:text="${message}"></p>
 </div>
 
-<form action="/users/add" method="post" th:object="${user}">
+<form th:action="@{/registration}" method="post" th:object="${user}">
     <input name="login" th:field="*{username}" placeholder="Логин" type="text"
            style="margin-bottom: 10px; margin-left: 10px; border-radius: 5px;"><br>
     <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}" style="color: darkred"></div>
@@ -20,9 +20,9 @@
            style="margin-bottom: 10px; margin-left: 10px; border-radius: 5px;"><br>
     <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" style="color: darkred"></div>
 
-<!--    <select name="role" style="margin-bottom: 10px; margin-left: 10px; border-radius: 5px;">-->
-<!--        <option value="admin">Администратор</option>-->
-<!--    </select><br>-->
+    <!--    <select name="role" style="margin-bottom: 10px; margin-left: 10px; border-radius: 5px;">-->
+    <!--        <option value="admin">Администратор</option>-->
+    <!--    </select><br>-->
 
     <button type="submit" class="btn btn-success" style="margin-left: 10px">Добавить</button>
 </form>

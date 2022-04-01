@@ -42,6 +42,10 @@ public class Worker {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private String birthDate;
 
+    @Pattern(regexp = "^\\S+@\\S+\\.\\S+$",
+            message = "Неккоректно указан адрес электронной почты")
+    private String email;
+
     @ManyToOne(optional = false, cascade = CascadeType.DETACH)
     @JoinColumn(name = "position_id")
     private Position position_;
@@ -129,7 +133,15 @@ public class Worker {
         this.birthDate = birthDate;
     }
 
-    public Worker(String name, String surname, String patronymic, String passSeria, String passNum, String INN, String birthDate, Position position_) {
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Worker(String name, String surname, String patronymic, String passSeria, String passNum, String INN, String birthDate, String email, Position position_) {
         Name = name;
         Surname = surname;
         Patronymic = patronymic;
@@ -137,6 +149,7 @@ public class Worker {
         PassNum = passNum;
         this.INN = INN;
         this.birthDate = birthDate;
+        this.email = email;
         this.position_ = position_;
     }
 

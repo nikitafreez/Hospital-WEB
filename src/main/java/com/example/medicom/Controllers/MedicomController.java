@@ -3,6 +3,8 @@ package com.example.medicom.Controllers;
 import com.example.medicom.Models.*;
 import com.example.medicom.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,10 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.swing.text.DateFormatter;
 import javax.validation.Valid;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Controller
@@ -31,6 +30,8 @@ public class MedicomController {
     private DiseaseRepository diseaseRepository;
     @Autowired
     private TreatmentRepository treatmentRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @GetMapping("/")
     public String main(Model model) {
@@ -44,31 +45,67 @@ public class MedicomController {
     }
 
     @GetMapping("/users")
+
     public String userMain(Model model) {
         Iterable<User> users = userRepository.findAll();
         model.addAttribute("users", users);
         return "User/UserTemplate";
     }
 
+    @GetMapping("/registration")
+    public String userRegGet(User user) {
+
+        return "User/UserTemplate-Register";
+    }
+
+    @PostMapping("/registration")
+    public String userRegPost(@Valid User user,
+                           BindingResult bindingResult,
+                           Model model) {
+        User userFromDb = userRepository.findByUsername(user.getUsername());
+        if(userFromDb != null) {
+            model.addAttribute("message", "Пользователь уже существует");
+            return "User/UserTemplate-Register";
+        }
+        if (bindingResult.hasErrors())
+            return "User/UserTemplate-Register";
+        else {
+            Calendar calendar = new GregorianCalendar();
+            Date lastEnter = calendar.getTime();
+            user.setActive(true);
+            user.setRoles(Collections.singleton(Role.USER));
+            user.setLastEnter(lastEnter);
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            userRepository.save(user);
+            return "redirect:/login";
+        }
+    }
+
     @GetMapping("/users/add")
     public String userGet(User user) {
 
-        return "Worker/WorkerTemplate-Add";
+        return "User/UserTemplate-Add";
     }
 
     @PostMapping("/users/add")
     public String userPost(@Valid User user,
                            BindingResult bindingResult,
-                           @RequestParam String login,
-                           @RequestParam String password,
-                           @RequestParam String role) {
+                           Model model) {
+        User userFromDb = userRepository.findByUsername(user.getUsername());
+        if(userFromDb != null) {
+            model.addAttribute("message", "Пользователь уже существует");
+            return "User/UserTemplate-Add";
+        }
         if (bindingResult.hasErrors())
-            return "Worker/WorkerTemplate-Add";
+            return "User/UserTemplate-Add";
         else {
             Calendar calendar = new GregorianCalendar();
             Date lastEnter = calendar.getTime();
-            User user1 = new User(login, password, role, lastEnter);
-            userRepository.save(user1);
+            user.setActive(true);
+            user.setRoles(Collections.singleton(Role.ADMIN));
+            user.setLastEnter(lastEnter);
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            userRepository.save(user);
             return "redirect:/users";
         }
     }
@@ -115,6 +152,7 @@ public class MedicomController {
 
 
     @GetMapping("/positions")
+
     public String positionMain(Model model) {
         Iterable<Position> positions = positionRepository.findAll();
         model.addAttribute("positions", positions);
@@ -176,6 +214,7 @@ public class MedicomController {
     }
 
     @GetMapping("/workers")
+
     public String workerMain(Model model) {
         Iterable<Worker> workers = workerRepository.findAll();
         model.addAttribute("workers", workers);
@@ -249,6 +288,7 @@ public class MedicomController {
     }
 
     @GetMapping("/patients")
+
     public String patientMain(Model model) {
         Iterable<Patient> patients = patientRepository.findAll();
         model.addAttribute("patients", patients);
@@ -310,6 +350,7 @@ public class MedicomController {
     }
 
     @GetMapping("/diseases")
+
     public String diseaseMain(Model model) {
         Iterable<Disease> diseases = diseaseRepository.findAll();
         model.addAttribute("diseases", diseases);
@@ -370,9 +411,8 @@ public class MedicomController {
         return "redirect:/diseases";
     }
 
-    //TODO ДОДЕЛАТЬ "ЛЕЧЕНИЕ"
-
     @GetMapping("/treatments")
+
     public String treatmentMain(Model model) {
         Iterable<Treatment> treatments = treatmentRepository.findAll();
         model.addAttribute("treatments", treatments);
