@@ -10,20 +10,41 @@
 <h2 align="center">ПАЦИЕНТЫ</h2>
 <a type="button" th:href="'/patients/add'" class="btn btn-success"
    style="margin-left: auto; margin-right: auto; display: block; width: 15%">Добавить</a>
-<div th:each="patient, el : ${patients}" align="center" style="margin-top: 20px">
-    <div class="card" style="width: 30rem" align="left">
-        <div class="card-body">
-            <h4 class="card-title">ФИО: <span
-                    th:text="${patient.surname} + ' ' + ${patient.name} + ' ' + ${patient.patronymic}"></span></h4>
-            <h6 class="card-subtitle mb-2 text-muted">Дата рождения: <span th:text="${patient.birthDate}"></span></h6>
-            <h5>Серия паспорта</h5>
-            <p class="card-text" th:text="${patient.passSeria}"></p>
-            <h5>Номер паспорта</h5>
-            <p class="card-text" th:text="${patient.passNum}"></p>
-            <h5>ОМС</h5>
-            <p class="card-text" th:text="${patient.OMS}"></p>
-            <a type="button" th:href="'/patients/' + ${patient.id} + '/edit'" class="btn btn-secondary">Изменить</a>
-            <a type="button" th:href="'/patients/' + ${patient.id} + '/delete'" class="btn btn-danger">Удалить</a>
+<style>
+    .leftBlock {
+        display: inline-block;
+        float: left;
+        width: 30%;
+        margin-left: 10px;
+        margin-top: 10px;
+    }
+
+    body {
+        margin: 0;
+        min-height: 100%;
+        display: grid;
+        grid-template-rows: auto 1fr auto;
+    }
+</style>
+<div>
+    <div th:each="patient, el : ${patients}" align="center" style="margin-top: 20px">
+        <div class="card leftBlock">
+            <div class="card-body">
+                <h4 class="card-title">ФИО: <span
+                        th:text="${patient.surname} + ' ' + ${patient.name} + ' ' + ${patient.patronymic}"></span></h4>
+                <h6 class="card-subtitle mb-2 text-muted">Дата рождения: <span th:text="${patient.birthDate}"></span>
+                </h6>
+                <h5>Серия паспорта</h5>
+                <p class="card-text" th:text="${patient.passSeria}"></p>
+                <h5>Номер паспорта</h5>
+                <p class="card-text" th:text="${patient.passNum}"></p>
+                <h5>ОМС</h5>
+                <p class="card-text" th:text="${patient.OMS}"></p>
+                <h5>Эл. почта</h5>
+                <p class="card-text" th:text="${patient.email}"></p>
+                <a type="button" th:href="'/patients/' + ${patient.id} + '/edit'" class="btn btn-secondary">Изменить</a>
+                <a type="button" th:href="'/patients/' + ${patient.id} + '/delete'" class="btn btn-danger">Удалить</a>
+            </div>
         </div>
     </div>
 </div>

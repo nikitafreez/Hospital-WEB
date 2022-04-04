@@ -6,7 +6,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.Date;
 
@@ -31,15 +30,19 @@ public class Patient {
 
     @Pattern(regexp = "\\d{4}",
             message = "Серия паспорта должна содержать 4 цифры")
-    private String PassSeria;
+    private String passSeria;
 
     @Pattern(regexp = "\\d{6}",
             message = "Номер паспорта должен содержать 6 цифр")
-    private String PassNum;
+    private String passNum;
 
     @Pattern(regexp = "\\d{16}",
             message = "Номер ОМС должен содержать 16 цифр")
     private String OMS;
+
+    @Pattern(regexp = "^\\S+@\\S+\\.\\S+$",
+            message = "Неккоректно указан адрес электронной почты")
+    private String email;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birthDate;
@@ -88,19 +91,19 @@ public class Patient {
     }
 
     public String getPassSeria() {
-        return PassSeria;
+        return passSeria;
     }
 
     public void setPassSeria(String passSeria) {
-        PassSeria = passSeria;
+        this.passSeria = passSeria;
     }
 
     public String getPassNum() {
-        return PassNum;
+        return passNum;
     }
 
     public void setPassNum(String passNum) {
-        PassNum = passNum;
+        this.passNum = passNum;
     }
 
     public String getOMS() {
@@ -119,13 +122,22 @@ public class Patient {
         this.birthDate = birthDate;
     }
 
-    public Patient(String name, String surname, String patronymic, String passSeria, String passNum, String OMS, Date birthDate) {
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Patient(String name, String surname, String patronymic, String passSeria, String passNum, String OMS, String email, Date birthDate) {
         Name = name;
         Surname = surname;
         Patronymic = patronymic;
-        PassSeria = passSeria;
-        PassNum = passNum;
+        this.passSeria = passSeria;
+        this.passNum = passNum;
         this.OMS = OMS;
+        this.email = email;
         this.birthDate = birthDate;
     }
 

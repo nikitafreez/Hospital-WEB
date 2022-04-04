@@ -7,7 +7,9 @@
 </head>
 <body>
 <div th:insert="/fragments/header-footer.html :: header"></div>
-
+<div th:if="${#messages}">
+    <p th:text="${message}"></p>
+</div>
 <div th:each="el : ${worker1}">
     <form method="post" th:object="${worker}">
         <input name="name" placeholder="Имя" type="text" th:value="${el.name}"

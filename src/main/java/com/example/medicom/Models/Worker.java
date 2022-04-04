@@ -1,12 +1,10 @@
 package com.example.medicom.Models;
 
-import net.bytebuddy.implementation.bind.annotation.Empty;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.util.Collection;
-import java.util.Date;
 
 @Entity
 public class Worker {
@@ -27,11 +25,11 @@ public class Worker {
 
     @Pattern(regexp = "\\d{4}",
             message = "Серия паспорта должна содержать 4 цифры")
-    private String PassSeria;
+    private String passSeria;
 
     @Pattern(regexp = "\\d{6}",
             message = "Номер паспорта должен содержать 6 цифр")
-    private String PassNum;
+    private String passNum;
 
     @Pattern(regexp = "\\d{12}",
             message = "Номер ИНН должен содержать 12 цифр")
@@ -41,6 +39,10 @@ public class Worker {
     @NotEmpty(message = "Поле не может быть пустым")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private String birthDate;
+
+    @Pattern(regexp = "[7-8]\\d{10}",
+            message = "Неккоректно указан номер телефона")
+    private String phoneNum;
 
     @Pattern(regexp = "^\\S+@\\S+\\.\\S+$",
             message = "Неккоректно указан адрес электронной почты")
@@ -94,19 +96,19 @@ public class Worker {
     }
 
     public String getPassSeria() {
-        return PassSeria;
+        return passSeria;
     }
 
     public void setPassSeria(String passSeria) {
-        PassSeria = passSeria;
+        this.passSeria = passSeria;
     }
 
     public String getPassNum() {
-        return PassNum;
+        return passNum;
     }
 
     public void setPassNum(String passNum) {
-        PassNum = passNum;
+        this.passNum = passNum;
     }
 
     public String getINN() {
@@ -141,14 +143,23 @@ public class Worker {
         this.email = email;
     }
 
-    public Worker(String name, String surname, String patronymic, String passSeria, String passNum, String INN, String birthDate, String email, Position position_) {
+    public String getPhoneNum() {
+        return phoneNum;
+    }
+
+    public void setPhoneNum(String phoneNum) {
+        this.phoneNum = phoneNum;
+    }
+
+    public Worker(String name, String surname, String patronymic, String passSeria, String passNum, String INN, String birthDate, String phoneNum, String email, Position position_) {
         Name = name;
         Surname = surname;
         Patronymic = patronymic;
-        PassSeria = passSeria;
-        PassNum = passNum;
+        this.passSeria = passSeria;
+        this.passNum = passNum;
         this.INN = INN;
         this.birthDate = birthDate;
+        this.phoneNum = phoneNum;
         this.email = email;
         this.position_ = position_;
     }

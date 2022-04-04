@@ -7,5 +7,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface WorkerRepository extends CrudRepository<Worker, Long> {
+    Worker findByPassSeria(String PassSeria);
+
+    Worker findByPassNum(String PassNum);
+
     Worker findByINN(String INN);
 }

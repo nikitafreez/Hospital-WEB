@@ -4,6 +4,9 @@ import com.example.medicom.Models.*;
 import com.example.medicom.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,6 +35,8 @@ public class MedicomController {
     private TreatmentRepository treatmentRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private LogRepository logRepository;
 
     @GetMapping("/")
     public String main(Model model) {
@@ -60,10 +65,10 @@ public class MedicomController {
 
     @PostMapping("/registration")
     public String userRegPost(@Valid User user,
-                           BindingResult bindingResult,
-                           Model model) {
+                              BindingResult bindingResult,
+                              Model model) {
         User userFromDb = userRepository.findByUsername(user.getUsername());
-        if(userFromDb != null) {
+        if (userFromDb != null) {
             model.addAttribute("message", "Пользователь уже существует");
             return "User/UserTemplate-Register";
         }
@@ -77,6 +82,14 @@ public class MedicomController {
             user.setLastEnter(lastEnter);
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             userRepository.save(user);
+
+            Log log = new Log();
+            log.setUser_(userRepository.findByUsername(user.getUsername()));
+//            System.out.println("User has authorities: " + user.getUsername());
+            log.setLogDate(new Date());
+            log.setLogText(user.getUsername() + " зарегистрировался в " + new Date());
+            logRepository.save(log);
+
             return "redirect:/login";
         }
     }
@@ -92,7 +105,7 @@ public class MedicomController {
                            BindingResult bindingResult,
                            Model model) {
         User userFromDb = userRepository.findByUsername(user.getUsername());
-        if(userFromDb != null) {
+        if (userFromDb != null) {
             model.addAttribute("message", "Пользователь уже существует");
             return "User/UserTemplate-Add";
         }
@@ -127,6 +140,11 @@ public class MedicomController {
                              @Valid User user,
                              BindingResult bindingResult,
                              Model model) {
+        User userFromDb = userRepository.findByUsername(user.getUsername());
+        if (userFromDb != null) {
+            model.addAttribute("message", "Пользователь уже существует");
+            return "redirect:/users/{id}/edit";
+        }
         if (bindingResult.hasErrors()) {
             Optional<User> users = userRepository.findById(id);
             ArrayList<User> res = new ArrayList<>();
@@ -167,7 +185,13 @@ public class MedicomController {
 
     @PostMapping("/positions/add")
     public String positionPost(@Valid Position position,
-                               BindingResult bindingResult) {
+                               BindingResult bindingResult,
+                               Model model) {
+        Position positionFromDb = positionRepository.findByPositionName(position.getPositionName());
+        if (positionFromDb != null) {
+            model.addAttribute("message", "Должность уже существует");
+            return "Position/PositionTemplate-Add";
+        }
         if (bindingResult.hasErrors())
             return "Position/PositionTemplate-Add";
         else {
@@ -193,6 +217,11 @@ public class MedicomController {
                                  @Valid Position position,
                                  BindingResult bindingResult,
                                  Model model) {
+        Position positionFromDb = positionRepository.findByPositionName(position.getPositionName());
+        if (positionFromDb != null) {
+            model.addAttribute("message", "Должность уже существует");
+            return "redirect:/positions/{id}/edit";
+        }
         if (bindingResult.hasErrors()) {
             Optional<Position> positions = positionRepository.findById(id);
             ArrayList<Position> res = new ArrayList<>();
@@ -235,6 +264,13 @@ public class MedicomController {
                              Model model) {
         Iterable<Position> positions = positionRepository.findAll();
         model.addAttribute("positions", positions);
+        Worker workerFromDbINN = workerRepository.findByINN(worker.getINN());
+        Worker workerFromDbSeria = workerRepository.findByPassSeria(worker.getPassSeria());
+        Worker workerFromDbNum = workerRepository.findByPassNum(worker.getPassNum());
+        if (workerFromDbINN != null || (workerFromDbSeria != null && workerFromDbNum != null)) {
+            model.addAttribute("message", "Сотрудник уже существует");
+            return "Worker/WorkerTemplate-Add";
+        }
         if (bindingResult.hasErrors())
             return "Worker/WorkerTemplate-Add";
         else {
@@ -263,8 +299,20 @@ public class MedicomController {
     public String workerUpdate(@PathVariable(value = "id") Long id,
                                @Valid Worker worker,
                                @RequestParam String positionName,
+                               @RequestParam String passSeria,
+                               @RequestParam String passNum,
+                               @RequestParam String INN,
                                BindingResult bindingResult,
                                Model model) {
+        Worker workerFromDbINN = workerRepository.findByINN(worker.getINN());
+        Worker workerFromDbSeria = workerRepository.findByPassSeria(worker.getPassSeria());
+        Worker workerFromDbNum = workerRepository.findByPassNum(worker.getPassNum());
+        if (workerFromDbINN != null || (workerFromDbSeria != null && workerFromDbNum != null)) {
+            if (worker.getPassSeria() != passSeria || worker.getPassNum() != passNum || worker.getINN() != INN) {
+                model.addAttribute("message", "Сотрудник уже существует");
+                return "redirect:/workers/{id}/edit";
+            }
+        }
         if (bindingResult.hasErrors()) {
             Optional<Worker> workers = workerRepository.findById(id);
             ArrayList<Worker> res = new ArrayList<>();

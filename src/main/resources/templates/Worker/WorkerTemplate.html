@@ -7,29 +7,53 @@
 </head>
 <body>
 <div th:insert="/fragments/header-footer.html :: header"></div>
-<h2 align="center">СОТРУДНИКИ</h2>\
+<h2 align="center">СОТРУДНИКИ</h2>
 <a type="button" th:href="'/workers/add'" class="btn btn-success"
    style="margin-left: auto; margin-right: auto; display: block; width: 15%">Добавить</a>
-<div th:each="worker, el : ${workers}" align="center" style="margin-top: 20px">
-    <div class="card" style="width: 30rem" align="left">
-        <div class="card-body">
-            <h4 class="card-title">ФИО: <span
-                    th:text="${worker.surname} + ' ' + ${worker.name} + ' ' + ${worker.patronymic}"></span></h4>
-            <h6 class="card-subtitle mb-2 text-muted">Дата рождения: <span th:text="${worker.birthDate}"></span></h6>
-            <h6 class="card-subtitle mb-2 text-muted">Должность: <span
-                    th:text="${worker.position_.positionName}"></span>
-            </h6>
-            <h5>Серия паспорта</h5>
-            <p class="card-text" th:text="${worker.passSeria}"></p>
-            <h5>Номер паспорта</h5>
-            <p class="card-text" th:text="${worker.passNum}"></p>
-            <h5>ИНН</h5>
-            <p class="card-text" th:text="${worker.INN}"></p>
-            <a type="button" th:href="'/workers/' + ${worker.id} + '/edit'" class="btn btn-secondary">Изменить</a>
-            <a type="button" th:href="'/workers/' + ${worker.id} + '/delete'" class="btn btn-danger">Удалить</a>
+<style>
+    .leftBlock {
+        display: inline-block;
+        float: left;
+        width: 30%;
+        margin-left: 10px;
+        margin-top: 10px;
+    }
+
+    body {
+        margin: 0;
+        min-height: 100%;
+        display: grid;
+        grid-template-rows: auto 1fr auto;
+    }
+</style>
+<div>
+    <div th:each="worker, el : ${workers}" style="margin-top: 20px; horiz-align: center">
+        <div class="card leftBlock">
+            <div class="card-body">
+                <h4 class="card-title">ФИО: <span
+                        th:text="${worker.surname} + ' ' + ${worker.name} + ' ' + ${worker.patronymic}"></span></h4>
+                <h6 class="card-subtitle mb-2 text-muted">Дата рождения: <span th:text="${worker.birthDate}"></span>
+                </h6>
+                <h6 class="card-subtitle mb-2 text-muted">Должность: <span
+                        th:text="${worker.position_.positionName}"></span>
+                </h6>
+                <h5>Серия паспорта</h5>
+                <p class="card-text" th:text="${worker.passSeria}"></p>
+                <h5>Номер паспорта</h5>
+                <p class="card-text" th:text="${worker.passNum}"></p>
+                <h5>ИНН</h5>
+                <p class="card-text" th:text="${worker.INN}"></p>
+                <h5>Номер телефона</h5>
+                <p class="card-text" th:text="${worker.phoneNum}"></p>
+                <h5>Эл. почта</h5>
+                <p class="card-text" th:text="${worker.email}"></p>
+                <a type="button" th:href="'/workers/' + ${worker.id} + '/edit'" class="btn btn-secondary">Изменить</a>
+                <a type="button" th:href="'/workers/' + ${worker.id} + '/delete'" class="btn btn-danger">Удалить</a>
+            </div>
         </div>
     </div>
 </div>
+<br>
 <div th:insert="/fragments/header-footer.html :: footer"></div>
 
 </body>

@@ -7,7 +7,9 @@
 </head>
 <body>
 <div th:insert="/fragments/header-footer.html :: header"></div>
-
+<div th:if="${#messages}">
+    <p th:text="${message}"></p>
+</div>
 <form action="/positions/add" method="post" th:object="${position}">
     <input name="positionName" th:field="*{positionName}" placeholder="Название должности" type="text"
            style="margin-bottom: 10px; margin-left: 10px; border-radius: 5px;"><br>
