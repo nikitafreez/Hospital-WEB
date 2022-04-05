@@ -25,8 +25,15 @@
         display: grid;
         grid-template-rows: auto 1fr auto;
     }
+
+    /*.test-overchar {*/
+    /*    white-space: nowrap;*/
+    /*    overflow: hidden;*/
+    /*    text-overflow: ellipsis;*/
+    /*    max-width: 2ch;*/
+    /*}*/
 </style>
-<div>
+<div style="horiz-align: center">
     <div th:each="worker, el : ${workers}" style="margin-top: 20px; horiz-align: center">
         <div class="card leftBlock">
             <div class="card-body">

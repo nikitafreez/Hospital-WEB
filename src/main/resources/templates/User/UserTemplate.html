@@ -32,7 +32,8 @@
             <div class="card-body">
                 <!--                <h1 th:text="${el.index}"></h1>-->
                 <h4 class="card-title">Пользователь <span th:text="${user.username}"></span></h4>
-                <h6 class="card-subtitle mb-2 text-muted">Последний вход: <span th:text="${user.lastEnter}"></span></h6>
+                <h5 class="card-title">Роль: <span th:text="${user.getRoles()}"></span></h5>
+                <h6 class="card-subtitle mb-2 text-muted">Дата регистрации: <span th:text="${user.lastEnter}"></span></h6>
                 <!--            <h5>Логин</h5>-->
                 <!--            <p class="card-text" th:text="${el.login}"></p>-->
                 <!--            <h5>Пароль</h5>-->

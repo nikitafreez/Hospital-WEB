@@ -15,12 +15,15 @@ public class Worker {
 
     @NotNull(message = "Поле не может быть пустым")
     @NotEmpty(message = "Поле не может быть пустым")
+    @Size(min = 2, max = 20, message = "Имя должно быть от 2 до 20 символов")
     private String Name;
 
     @NotNull(message = "Поле не может быть пустым")
     @NotEmpty(message = "Поле не может быть пустым")
+    @Size(min = 2, max = 20, message = "Фамилия должна быть от 2 до 20 символов")
     private String Surname;
 
+    @Size(max = 20, message = "Отчество должно быть до 20 символов")
     private String Patronymic;
 
     @Pattern(regexp = "\\d{4}",

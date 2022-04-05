@@ -36,6 +36,10 @@
                style="margin-bottom: 10px; margin-left: 10px; border-radius: 5px;"><br>
         <div th:if="${#fields.hasErrors('INN')}" th:errors="*{INN}" style="color: darkred"></div>
 
+        <input id="phoneNum" name="phoneNum" placeholder="Номер телефона" type="text" th:value="${el.phoneNum}"
+               style="margin-bottom: 10px; margin-left: 10px; border-radius: 5px;"><br>
+        <div th:if="${#fields.hasErrors('phoneNum')}" th:errors="*{phoneNum}" style="color: darkred"></div>
+
         <input id="dete" name="birthDate" placeholder="День рождения" type="date" th:value="${el.birthDate}"
                style="margin-bottom: 10px; margin-left: 10px; border-radius: 5px;"><br>
         <div th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}" style="color: darkred"></div>

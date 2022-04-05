@@ -1,5 +1,5 @@
 package com.example.medicom.Models;
 
 public enum Role {
-    USER, ADMIN;
+    USER, ADMIN, KADR, DOCTOR, BLOGER;
 }

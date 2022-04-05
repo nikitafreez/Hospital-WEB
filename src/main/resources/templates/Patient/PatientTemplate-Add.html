@@ -7,7 +7,9 @@
 </head>
 <body>
 <div th:insert="/fragments/header-footer.html :: header"></div>
-
+<div th:if="${#messages}">
+    <p th:text="${message}"></p>
+</div>
 <form action="/patients/add" method="post" th:object="${patient}">
     <input name="name" th:field="*{name}" placeholder="Имя" type="text"
            style="margin-bottom: 10px; margin-left: 10px; border-radius: 5px;"><br>
@@ -32,6 +34,10 @@
     <input name="OMS" th:field="*{OMS}" placeholder="ОМС" type="text"
            style="margin-bottom: 10px; margin-left: 10px; border-radius: 5px;"><br>
     <div th:if="${#fields.hasErrors('OMS')}" th:errors="*{OMS}" style="color: darkred"></div>
+
+    <input id="phoneNum" name="phoneNum" th:field="*{phoneNum}" placeholder="Номер телефона" type="text"
+           style="margin-bottom: 10px; margin-left: 10px; border-radius: 5px;"><br>
+    <div th:if="${#fields.hasErrors('phoneNum')}" th:errors="*{phoneNum}" style="color: darkred"></div>
 
     <input id="dete" name="birthDate" th:field="*{birthDate}" placeholder="День рождения" type="date"
            style="margin-bottom: 10px; margin-left: 10px; border-radius: 5px;"><br>

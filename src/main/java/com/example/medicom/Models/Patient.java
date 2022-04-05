@@ -6,6 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.Date;
 
@@ -18,14 +19,15 @@ public class Patient {
 
     @NotNull(message = "Поле не может быть пустым")
     @NotEmpty(message = "Поле не может быть пустым")
+    @Size(min = 2, max = 20, message = "Имя должно быть от 2 до 20 символов")
     private String Name;
 
     @NotNull(message = "Поле не может быть пустым")
     @NotEmpty(message = "Поле не может быть пустым")
+    @Size(min = 2, max = 20, message = "Фамилия должна быть от 2 до 20 символов")
     private String Surname;
 
-    @NotNull(message = "Поле не может быть пустым")
-    @NotEmpty(message = "Поле не может быть пустым")
+    @Size(max = 20, message = "Отчество должно быть до 20 символов")
     private String Patronymic;
 
     @Pattern(regexp = "\\d{4}",
@@ -39,6 +41,10 @@ public class Patient {
     @Pattern(regexp = "\\d{16}",
             message = "Номер ОМС должен содержать 16 цифр")
     private String OMS;
+
+    @Pattern(regexp = "[7-8]\\d{10}",
+            message = "Неккоректно указан номер телефона")
+    private String phoneNum;
 
     @Pattern(regexp = "^\\S+@\\S+\\.\\S+$",
             message = "Неккоректно указан адрес электронной почты")
@@ -130,13 +136,22 @@ public class Patient {
         this.email = email;
     }
 
-    public Patient(String name, String surname, String patronymic, String passSeria, String passNum, String OMS, String email, Date birthDate) {
+    public String getPhoneNum() {
+        return phoneNum;
+    }
+
+    public void setPhoneNum(String phoneNum) {
+        this.phoneNum = phoneNum;
+    }
+
+    public Patient(String name, String surname, String patronymic, String passSeria, String passNum, String OMS, String phoneNum, String email, Date birthDate) {
         Name = name;
         Surname = surname;
         Patronymic = patronymic;
         this.passSeria = passSeria;
         this.passNum = passNum;
         this.OMS = OMS;
+        this.phoneNum = phoneNum;
         this.email = email;
         this.birthDate = birthDate;
     }

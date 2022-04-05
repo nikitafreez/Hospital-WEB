@@ -35,6 +35,24 @@
                     <li class="nav-item"><a href="/treatments" class="nav-link">Лечения</a></li>
                 </ul>
             </div>
+            <div sec:authorize="hasAuthority('DOCTOR')">
+                <ul class="nav nav-pills">
+                    <li class="nav-item"><a href="/patients" class="nav-link">Пациенты</a></li>
+                    <li class="nav-item"><a href="/diseases" class="nav-link">Заболевания</a></li>
+                    <li class="nav-item"><a href="/treatments" class="nav-link">Лечения</a></li>
+                </ul>
+            </div>
+            <div sec:authorize="hasAuthority('KADR')">
+                <ul class="nav nav-pills">
+                    <li class="nav-item"><a href="/workers" class="nav-link">Сотрудники</a></li>
+                    <li class="nav-item"><a href="/positions" class="nav-link">Должности</a></li>
+                </ul>
+            </div>
+            <div sec:authorize="hasAuthority('BLOGER')">
+                <ul class="nav nav-pills">
+                    <li class="nav-item"><a href="#" class="nav-link">Блог больницы</a></li>
+                </ul>
+            </div>
         </header>
     </div>
 </div>
@@ -50,7 +68,24 @@
                     <li class="nav-item"><a href="/patients" class="nav-link px-2 text-muted">Пациенты</a></li>
                     <li class="nav-item"><a href="/diseases" class="nav-link px-2 text-muted">Заболевания</a></li>
                     <li class="nav-item"><a href="/treatments" class="nav-link px-2 text-muted">Лечения</a></li>
-
+                </ul>
+            </div>
+            <div sec:authorize="hasAuthority('DOCTOR')">
+                <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+                    <li class="nav-item"><a href="/patients" class="nav-link px-2 text-muted">Пациенты</a></li>
+                    <li class="nav-item"><a href="/diseases" class="nav-link px-2 text-muted">Заболевания</a></li>
+                    <li class="nav-item"><a href="/treatments" class="nav-link px-2 text-muted">Лечения</a></li>
+                </ul>
+            </div>
+            <div sec:authorize="hasAuthority('KADR')">
+                <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+                    <li class="nav-item"><a href="/workers" class="nav-link px-2 text-muted">Сотрудники</a></li>
+                    <li class="nav-item"><a href="/positions" class="nav-link px-2 text-muted">Должности</a></li>
+                </ul>
+            </div>
+            <div sec:authorize="hasAuthority('BLOGER')">
+                <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+                    <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Блог больницы</a></li>
                 </ul>
             </div>
             <p class="text-center text-muted">© 2022 Курсовой проект</p>

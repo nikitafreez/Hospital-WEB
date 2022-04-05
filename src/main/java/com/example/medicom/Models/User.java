@@ -3,6 +3,7 @@ package com.example.medicom.Models;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
@@ -15,6 +16,7 @@ public class User {
 
     @NotNull(message = "Поле не может быть пустым")
     @NotEmpty(message = "Поле не может быть пустым")
+    @Size(min = 5, max = 13, message = "Логин должен быть больше 5 символов и меньше 13")
     private String username;
 
     @NotNull(message = "Поле не может быть пустым")

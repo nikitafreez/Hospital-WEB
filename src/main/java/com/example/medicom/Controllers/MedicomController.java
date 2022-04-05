@@ -102,6 +102,7 @@ public class MedicomController {
 
     @PostMapping("/users/add")
     public String userPost(@Valid User user,
+                           @RequestParam String role,
                            BindingResult bindingResult,
                            Model model) {
         User userFromDb = userRepository.findByUsername(user.getUsername());
@@ -115,7 +116,27 @@ public class MedicomController {
             Calendar calendar = new GregorianCalendar();
             Date lastEnter = calendar.getTime();
             user.setActive(true);
-            user.setRoles(Collections.singleton(Role.ADMIN));
+            switch (role) {
+                case "ADMIN": {
+                    user.setRoles(Collections.singleton(Role.ADMIN));
+                    break;
+
+                }
+                case "KADR": {
+                    user.setRoles(Collections.singleton(Role.KADR));
+                    break;
+                }
+                case "DOCTOR": {
+                    user.setRoles(Collections.singleton(Role.DOCTOR));
+                    break;
+
+                }
+                case "BLOGER": {
+                    user.setRoles(Collections.singleton(Role.BLOGER));
+                    break;
+                }
+            }
+//            System.out.println(role);
             user.setLastEnter(lastEnter);
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             userRepository.save(user);
@@ -138,9 +159,10 @@ public class MedicomController {
     @PostMapping("/users/{id}/edit")
     public String userUpdate(@PathVariable(value = "id") Long id,
                              @Valid User user,
+                             @RequestParam String username,
                              BindingResult bindingResult,
                              Model model) {
-        User userFromDb = userRepository.findByUsername(user.getUsername());
+        User userFromDb = userRepository.findByUsername(username);
         if (userFromDb != null) {
             model.addAttribute("message", "Пользователь уже существует");
             return "redirect:/users/{id}/edit";
@@ -150,7 +172,7 @@ public class MedicomController {
             ArrayList<User> res = new ArrayList<>();
             users.ifPresent(res::add);
             model.addAttribute("user1", res);
-            return "Worker/WorkerTemplate-Edit";
+            return "User/UserTemplate-Edit";
         } else {
             Calendar calendar = new GregorianCalendar();
             Date lastEnter = calendar.getTime();
@@ -170,7 +192,7 @@ public class MedicomController {
 
 
     @GetMapping("/positions")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'KADR')")
     public String positionMain(Model model) {
         Iterable<Position> positions = positionRepository.findAll();
         model.addAttribute("positions", positions);
@@ -243,7 +265,7 @@ public class MedicomController {
     }
 
     @GetMapping("/workers")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'KADR')")
     public String workerMain(Model model) {
         Iterable<Worker> workers = workerRepository.findAll();
         model.addAttribute("workers", workers);
@@ -336,7 +358,7 @@ public class MedicomController {
     }
 
     @GetMapping("/patients")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'DOCTOR')")
     public String patientMain(Model model) {
         Iterable<Patient> patients = patientRepository.findAll();
         model.addAttribute("patients", patients);
@@ -351,7 +373,15 @@ public class MedicomController {
 
     @PostMapping("/patients/add")
     public String patientPost(@Valid Patient patient,
-                              BindingResult bindingResult) {
+                              BindingResult bindingResult,
+                              Model model) {
+        Patient patientFromDbOMS = patientRepository.findByOMS(patient.getOMS());
+        Patient patientFromDbSeria = patientRepository.findByPassSeria(patient.getPassSeria());
+        Patient patientFromDbNum = patientRepository.findByPassNum(patient.getPassNum());
+        if (patientFromDbOMS != null || (patientFromDbSeria != null && patientFromDbNum != null)) {
+            model.addAttribute("message", "Пациент уже существует");
+            return "Patient/PatientTemplate-Add";
+        }
         if (bindingResult.hasErrors())
             return "Patient/PatientTemplate-Add";
         else {
@@ -375,8 +405,20 @@ public class MedicomController {
     @PostMapping("/patients/{id}/edit")
     public String patientUpdate(@PathVariable(value = "id") Long id,
                                 @Valid Patient patient,
+                                @RequestParam String passSeria,
+                                @RequestParam String passNum,
+                                @RequestParam String OMS,
                                 BindingResult bindingResult,
                                 Model model) {
+        Patient patientFromDbOMS = patientRepository.findByOMS(patient.getOMS());
+        Patient patientFromDbSeria = patientRepository.findByPassSeria(patient.getPassSeria());
+        Patient patientFromDbNum = patientRepository.findByPassNum(patient.getPassNum());
+        if (patientFromDbOMS != null || (patientFromDbSeria != null && patientFromDbNum != null)) {
+            if (patient.getPassSeria() != passSeria || patient.getPassNum() != passNum || patient.getOMS() != OMS) {
+                model.addAttribute("message", "Пациент уже существует");
+                return "redirect:/patients/{id}/edit";
+            }
+        }
         if (bindingResult.hasErrors()) {
             Optional<Patient> patient1 = patientRepository.findById(id);
             ArrayList<Patient> res = new ArrayList<>();
@@ -398,7 +440,7 @@ public class MedicomController {
     }
 
     @GetMapping("/diseases")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'DOCTOR')")
     public String diseaseMain(Model model) {
         Iterable<Disease> diseases = diseaseRepository.findAll();
         model.addAttribute("diseases", diseases);
@@ -460,7 +502,7 @@ public class MedicomController {
     }
 
     @GetMapping("/treatments")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'DOCTOR')")
     public String treatmentMain(Model model) {
         Iterable<Treatment> treatments = treatmentRepository.findAll();
         model.addAttribute("treatments", treatments);

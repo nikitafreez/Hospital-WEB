@@ -20,9 +20,12 @@
            style="margin-bottom: 10px; margin-left: 10px; border-radius: 5px;"><br>
     <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" style="color: darkred"></div>
 
-<!--    <select name="role" style="margin-bottom: 10px; margin-left: 10px; border-radius: 5px;">-->
-<!--        <option value="admin">Администратор</option>-->
-<!--    </select><br>-->
+    <select name="role" style="margin-bottom: 10px; margin-left: 10px; border-radius: 5px;">
+        <option th:value="'ADMIN'">Администратор</option>
+        <option th:value="'KADR'">Сотрудник отдела кадров</option>
+        <option th:value="'DOCTOR'">Врач</option>
+<!--        <option th:value="'BLOGER'">Журналист</option>-->
+    </select><br>
 
     <button type="submit" class="btn btn-success" style="margin-left: 10px">Добавить</button>
 </form>
