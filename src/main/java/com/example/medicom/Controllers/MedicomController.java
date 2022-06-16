@@ -2,11 +2,13 @@ package com.example.medicom.Controllers;
 
 import com.example.medicom.Models.*;
 import com.example.medicom.Repository.*;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -51,9 +53,14 @@ public class MedicomController {
 
     @GetMapping("/users")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public String userMain(Model model) {
-        Iterable<User> users = userRepository.findAll();
+    public String userMain(Model model,
+                           @PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
+        Page<User> users = userRepository.findAll(pageable);
         model.addAttribute("users", users);
+        model.addAttribute("page", pageable);
+
+        System.out.println("Страница была загружена");
+
         return "User/UserTemplate";
     }
 
@@ -85,7 +92,6 @@ public class MedicomController {
 
             Log log = new Log();
             log.setUser_(userRepository.findByUsername(user.getUsername()));
-//            System.out.println("User has authorities: " + user.getUsername());
             log.setLogDate(new Date());
             log.setLogText(user.getUsername() + " зарегистрировался в " + new Date());
             logRepository.save(log);
@@ -136,7 +142,6 @@ public class MedicomController {
                     break;
                 }
             }
-//            System.out.println(role);
             user.setLastEnter(lastEnter);
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             userRepository.save(user);
@@ -541,7 +546,7 @@ public class MedicomController {
         else {
             Disease disease = diseaseRepository.findByDiseaseName(diseaseName);
             Worker worker = workerRepository.findByINN(workerINN.substring(5, 17));
-            Patient patient = patientRepository.findByOMS(patientOMS.substring(5, 21));
+            Patient patient = patientRepository.findByOMS(patientOMS.substring(5, 22));
 
             treatment.setDisease_(disease);
             treatment.setWorker_(worker);
@@ -596,7 +601,7 @@ public class MedicomController {
         } else {
             Disease disease = diseaseRepository.findByDiseaseName(diseaseName);
             Worker worker = workerRepository.findByINN(workerINN.substring(5, 17));
-            Patient patient = patientRepository.findByOMS(patientOMS.substring(5, 21));
+            Patient patient = patientRepository.findByOMS(patientOMS.substring(5, 22));
 
             treatment.setDisease_(disease);
             treatment.setWorker_(worker);

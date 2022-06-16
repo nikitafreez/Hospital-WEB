@@ -13,23 +13,21 @@ public class Treatment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "Поле не может быть пустым")
-    @NotEmpty(message = "Поле не может быть пустым")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private String treatmentDate;
 
 
     private Float treatmentSum;
 
-    @ManyToOne(optional = false, cascade = CascadeType.DETACH)
+    @ManyToOne(optional = true, cascade = CascadeType.DETACH)
     @JoinColumn(name = "worker_id")
     private Worker worker_;
 
-    @ManyToOne(optional = false, cascade = CascadeType.DETACH)
+    @ManyToOne(optional = true, cascade = CascadeType.DETACH)
     @JoinColumn(name = "patient_id")
     private Patient patient_;
 
-    @ManyToOne(optional = false, cascade = CascadeType.DETACH)
+    @ManyToOne(optional = true, cascade = CascadeType.DETACH)
     @JoinColumn(name = "disease_id")
     private Disease disease_;
 
